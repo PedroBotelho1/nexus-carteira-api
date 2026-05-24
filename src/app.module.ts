@@ -5,9 +5,10 @@ import { PrismaModule } from './prisma/prisma.module';
 import { UsersModule } from './users/users.module';
 import { AuthModule } from './auth/auth.module';
 import { WalletModule } from './wallet/wallet.module';
+import { WebhooksModule } from './webhooks/webhooks.module';
 
 @Module({
-  imports: [PrismaModule, UsersModule, AuthModule, WalletModule],
+  imports: [PrismaModule, UsersModule, AuthModule, WalletModule, WebhooksModule],
   controllers: [AppController],
   providers: [AppService],
 })

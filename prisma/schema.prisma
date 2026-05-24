@@ -20,6 +20,7 @@ model Wallet {
   userId    String    @unique
   user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
   balances  Balance[] 
+  transactions Transaction[]
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
 }
@@ -34,4 +35,20 @@ model Balance {
   updatedAt DateTime @updatedAt
 
   @@unique([walletId, token]) 
+}
+
+model Transaction {
+  id              String   @id @default(uuid())
+  walletId        String
+  wallet          Wallet   @relation(fields: [walletId], references: [id], onDelete: Cascade)
+
+  type            String
+  token           String
+  amount          Float
+  previousBalance Float
+  newBalance      Float
+
+  idempotencyKey  String?  @unique
+
+  createdAt       DateTime @default(now())
 }
