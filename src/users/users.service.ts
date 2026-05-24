@@ -22,14 +22,25 @@ export class UsersService {
       saltRounds,
     );
 
+    // Criamos o utilizador e, na mesma operação, a carteira com os 3 saldos zerados
     const user = await this.prisma.user.create({
       data: {
         email: createUserDto.email,
         password: hashedPassword,
+        wallet: {
+          create: {
+            balances: {
+              create: [
+                { token: 'BRL', amount: 0.0 },
+                { token: 'BTC', amount: 0.0 },
+                { token: 'ETH', amount: 0.0 },
+              ],
+            },
+          },
+        },
       },
     });
 
-    // A linha abaixo avisa o ESLint para não reclamar da variável password
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { password, ...result } = user;
     return result;
