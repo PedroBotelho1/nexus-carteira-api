@@ -7,9 +7,10 @@ import { AuthModule } from './auth/auth.module';
 import { WalletModule } from './wallet/wallet.module';
 import { WebhooksModule } from './webhooks/webhooks.module';
 import { WithdrawModule } from './withdraw/withdraw.module';
+import { TransactionsModule } from './transactions/transactions.module';
 
 @Module({
-  imports: [PrismaModule, UsersModule, AuthModule, WalletModule, WebhooksModule, WithdrawModule],
+  imports: [PrismaModule, UsersModule, AuthModule, WalletModule, WebhooksModule, WithdrawModule, TransactionsModule],
   controllers: [AppController],
   providers: [AppService],
 })
