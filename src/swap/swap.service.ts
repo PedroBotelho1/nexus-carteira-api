@@ -2,8 +2,11 @@ import {
   Injectable,
   BadRequestException,
   NotFoundException,
+  Inject,
 } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
+import { CACHE_MANAGER } from '@nestjs/cache-manager';
+import type { Cache } from 'cache-manager';
 
 const COINGECKO_MAP: Record<string, string> = {
   BTC: 'bitcoin',
@@ -17,7 +20,10 @@ type CoinGeckoResponse = Record<string, Record<string, number>>;
 
 @Injectable()
 export class SwapService {
-  constructor(private prisma: PrismaService) {}
+  constructor(
+    private prisma: PrismaService,
+    @Inject(CACHE_MANAGER) private cacheManager: Cache,
+  ) {}
 
   private async fetchExchangeRate(
     fromToken: string,
@@ -30,25 +36,45 @@ export class SwapService {
       throw new BadRequestException('Moeda não suportada.');
     }
 
+    // --- INÍCIO DO REDIS ---
+    const cacheKey = `cotacao-${fromToken.toUpperCase()}-${toToken.toUpperCase()}`;
+    const cachedRate = await this.cacheManager.get<number>(cacheKey);
+
+    if (cachedRate) {
+      console.log('⚡ Pegou a cotação do Redis na nuvem!');
+      return cachedRate;
+    }
+    // --- FIM DA CHECAGEM DO CACHE ---
+
     try {
+      console.log('🐢 Buscando cotação na CoinGecko...');
       const url = `https://api.coingecko.com/api/v3/simple/price?ids=${fromId}&vs_currencies=${toId}`;
       const response = await fetch(url);
       const data = (await response.json()) as CoinGeckoResponse;
 
+      let rateToReturn: number | null = null;
+
       if (data[fromId] && data[fromId][toId]) {
-        return data[fromId][toId];
+        rateToReturn = data[fromId][toId];
+      } else {
+        const urlRev = `https://api.coingecko.com/api/v3/simple/price?ids=${toId}&vs_currencies=${fromId}`;
+        const responseRev = await fetch(urlRev);
+        const dataRev = (await responseRev.json()) as CoinGeckoResponse;
+
+        if (dataRev[toId] && dataRev[toId][fromId]) {
+          rateToReturn = 1 / dataRev[toId][fromId];
+        }
       }
 
-      const urlRev = `https://api.coingecko.com/api/v3/simple/price?ids=${toId}&vs_currencies=${fromId}`;
-      const responseRev = await fetch(urlRev);
-      const dataRev = (await responseRev.json()) as CoinGeckoResponse;
-
-      if (dataRev[toId] && dataRev[toId][fromId]) {
-        return 1 / dataRev[toId][fromId];
+      if (rateToReturn) {
+        // Salvando no Redis por 60 segundos antes de devolver a cotação
+        await this.cacheManager.set(cacheKey, rateToReturn);
+        return rateToReturn;
       }
 
       throw new Error('Cotação não encontrada na API.');
     } catch {
+      console.log('⚠️ CoinGecko falhou. Usando plano de emergência...');
       // PLANO DE EMERGÊNCIA
       const rates: Record<string, number> = {
         'BTC-BRL': 350000,
@@ -58,10 +84,17 @@ export class SwapService {
 
       const direct =
         rates[`${fromToken.toUpperCase()}-${toToken.toUpperCase()}`];
-      if (direct) return direct;
+      if (direct) {
+        await this.cacheManager.set(cacheKey, direct);
+        return direct;
+      }
 
       const rev = rates[`${toToken.toUpperCase()}-${fromToken.toUpperCase()}`];
-      if (rev) return 1 / rev;
+      if (rev) {
+        const revRate = 1 / rev;
+        await this.cacheManager.set(cacheKey, revRate);
+        return revRate;
+      }
 
       throw new BadRequestException(
         'Erro ao buscar cotação. Tente novamente mais tarde.',

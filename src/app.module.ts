@@ -9,9 +9,20 @@ import { WebhooksModule } from './webhooks/webhooks.module';
 import { WithdrawModule } from './withdraw/withdraw.module';
 import { TransactionsModule } from './transactions/transactions.module';
 import { SwapModule } from './swap/swap.module';
+import { CacheModule } from '@nestjs/cache-manager';
+import { redisStore } from 'cache-manager-redis-yet';
 
 @Module({
   imports: [
+    CacheModule.registerAsync({
+      isGlobal: true,
+      useFactory: async () => ({
+        store: await redisStore({
+          url: process.env.REDIS_URL,
+          ttl: 60000, // Tempo de expiração em milissegundos (60 segundos)
+        }),
+      }),
+    }),
     PrismaModule,
     UsersModule,
     AuthModule,
