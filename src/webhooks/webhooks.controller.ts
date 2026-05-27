@@ -17,7 +17,7 @@ export class WebhooksController {
   ) {
     const { userId, token, amount, idempotencyKey } = body;
 
-    // Repassa a bola para o Service fazer a lógica pesada
+    // Repassa para o Service fazer a lógica pesada
     return this.webhooksService.processDeposit(
       userId,
       token,

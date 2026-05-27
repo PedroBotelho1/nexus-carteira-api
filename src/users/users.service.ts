@@ -22,7 +22,7 @@ export class UsersService {
       saltRounds,
     );
 
-    // Criamos o utilizador e, na mesma operação, a carteira com os 3 saldos zerados
+    // Cria o utilizador e a carteira com os 3 saldos zerados
     const user = await this.prisma.user.create({
       data: {
         email: createUserDto.email,

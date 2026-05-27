@@ -12,7 +12,7 @@ const COINGECKO_MAP: Record<string, string> = {
   BRL: 'brl',
 };
 
-// Explicamos para o TypeScript exatamente o que a CoinGecko vai devolver
+// Explica para o TypeScript exatamente o que a CoinGecko vai devolver
 type CoinGeckoResponse = Record<string, Record<string, number>>;
 
 @Injectable()

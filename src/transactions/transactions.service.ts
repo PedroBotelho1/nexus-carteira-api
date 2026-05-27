@@ -17,7 +17,6 @@ export class TransactionsService {
     // Matemática da paginação (Ex: Página 2 com limite 10 = Pula os 10 primeiros)
     const skip = (page - 1) * limit;
 
-    // Busca o total de transações para o frontend saber quantas páginas existem no total
     const total = await this.prisma.transaction.count({
       where: { walletId: wallet.id },
     });

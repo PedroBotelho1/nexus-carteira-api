@@ -6,7 +6,7 @@ import {
   Query,
   UseGuards,
   Req,
-  UnauthorizedException, // <-- Importado aqui bonitinho!
+  UnauthorizedException,
 } from '@nestjs/common';
 import { SwapService } from './swap.service';
 import { JwtAuthGuard } from '../auth/jwt-auth/jwt-auth.guard';

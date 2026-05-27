@@ -32,7 +32,6 @@ export class WithdrawController {
       amount: number;
     },
   ) {
-    // Aqui está a mágica: puxamos o 'sub' e colocamos a trava pro TypeScript
     const userId = req.user.sub || req.user.userId;
 
     if (!userId) {

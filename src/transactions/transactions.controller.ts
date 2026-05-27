@@ -4,13 +4,12 @@ import {
   Query,
   UseGuards,
   Req,
-  UnauthorizedException, // <-- Exceção importada aqui!
+  UnauthorizedException,
 } from '@nestjs/common';
 import { TransactionsService } from './transactions.service';
 import { JwtAuthGuard } from '../auth/jwt-auth/jwt-auth.guard';
 import { Request } from 'express';
 
-// Atualizamos a interface para o TypeScript parar de chorar sobre o 'sub'
 interface AuthenticatedRequest extends Request {
   user: {
     sub?: string;
@@ -35,9 +34,6 @@ export class TransactionsController {
     if (!userId) {
       throw new UnauthorizedException('ID do usuário não encontrado no token');
     }
-
-    // Se o nome da função no seu service for diferente de 'getTransactions'
-    // ou 'findAll', é só ajustar o nome após o ponto abaixo:
     return this.transactionsService.getTransactions(
       userId,
       parseInt(page, 10),

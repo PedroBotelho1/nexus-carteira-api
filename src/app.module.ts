@@ -11,7 +11,16 @@ import { TransactionsModule } from './transactions/transactions.module';
 import { SwapModule } from './swap/swap.module';
 
 @Module({
-  imports: [PrismaModule, UsersModule, AuthModule, WalletModule, WebhooksModule, WithdrawModule, TransactionsModule, SwapModule],
+  imports: [
+    PrismaModule,
+    UsersModule,
+    AuthModule,
+    WalletModule,
+    WebhooksModule,
+    WithdrawModule,
+    TransactionsModule,
+    SwapModule,
+  ],
   controllers: [AppController],
   providers: [AppService],
 })

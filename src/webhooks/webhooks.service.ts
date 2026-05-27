@@ -15,7 +15,7 @@ export class WebhooksService {
     amount: number,
     idempotencyKey: string,
   ) {
-    // 1. Trava de Segurança: Esse depósito já foi processado antes?
+    // Trava de Segurança: Esse depósito já foi processado antes?
     const existingTransaction = await this.prisma.transaction.findUnique({
       where: { idempotencyKey },
     });
@@ -24,7 +24,7 @@ export class WebhooksService {
       throw new ConflictException('Depósito já processado anteriormente.');
     }
 
-    // 2. Verifica se a carteira do usuário existe
+    // Verifica se a carteira do usuário existe
     const wallet = await this.prisma.wallet.findUnique({
       where: { userId },
     });
@@ -33,7 +33,7 @@ export class WebhooksService {
       throw new NotFoundException('Usuário ou carteira não encontrados.');
     }
 
-    // 3. Regra do PDF: O token existe na carteira deste usuário?
+    // O token existe na carteira deste usuário?
     const balance = await this.prisma.balance.findUnique({
       where: {
         walletId_token: {
@@ -49,10 +49,8 @@ export class WebhooksService {
       );
     }
 
-    // 4. A Mágica Matemática
     const novoSaldo = balance.amount + amount;
 
-    // 5. Prisma Transaction (Tudo ou Nada)
     const result = await this.prisma.$transaction([
       this.prisma.balance.update({
         where: { id: balance.id },

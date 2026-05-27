@@ -8,7 +8,7 @@ export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
   @Post()
-  @UsePipes(new ZodValidationPipe(CreateUserSchema)) // <-- Colocando o porteiro na porta!
+  @UsePipes(new ZodValidationPipe(CreateUserSchema)) // Colocando o porteiro na porta!
   create(@Body() createUserDto: CreateUserDto) {
     return this.usersService.create(createUserDto);
   }

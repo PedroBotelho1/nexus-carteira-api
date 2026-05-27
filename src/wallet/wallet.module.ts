@@ -2,10 +2,10 @@ import { Module } from '@nestjs/common';
 import { WalletService } from './wallet.service';
 import { WalletController } from './wallet.controller';
 import { PrismaModule } from '../prisma/prisma.module';
-import { AuthModule } from '../auth/auth.module'; // Tem que ter essa linha
+import { AuthModule } from '../auth/auth.module';
 
 @Module({
-  imports: [PrismaModule, AuthModule], // Tem que ter o AuthModule aqui dentro!
+  imports: [PrismaModule, AuthModule],
   controllers: [WalletController],
   providers: [WalletService],
 })
