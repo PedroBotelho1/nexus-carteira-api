@@ -1,11 +1,19 @@
-import { Controller, Post, Body, UseGuards, Req } from '@nestjs/common';
+import {
+  Controller,
+  Post,
+  Body,
+  UseGuards,
+  Req,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { WithdrawService } from './withdraw.service';
 import { JwtAuthGuard } from '../auth/jwt-auth/jwt-auth.guard';
 import { Request } from 'express';
 
 interface AuthenticatedRequest extends Request {
   user: {
-    userId: string;
+    sub?: string;
+    userId?: string;
     email: string;
   };
 }
@@ -16,13 +24,25 @@ export class WithdrawController {
 
   @UseGuards(JwtAuthGuard)
   @Post()
-  async processWithdraw(
+  async executeWithdraw(
     @Req() req: AuthenticatedRequest,
-    @Body() body: { token: string; amount: number },
+    @Body()
+    body: {
+      token: string;
+      amount: number;
+    },
   ) {
-    const userId = req.user.userId;
-    const { token, amount } = body;
+    // Aqui está a mágica: puxamos o 'sub' e colocamos a trava pro TypeScript
+    const userId = req.user.sub || req.user.userId;
 
-    return this.withdrawService.processWithdraw(userId, token, amount);
+    if (!userId) {
+      throw new UnauthorizedException('ID do usuário não encontrado no token');
+    }
+
+    return this.withdrawService.processWithdraw(
+      userId,
+      body.token,
+      body.amount,
+    );
   }
 }

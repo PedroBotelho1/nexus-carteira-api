@@ -3,18 +3,18 @@ import { AuthService } from './auth.service';
 import { AuthController } from './auth.controller';
 import { PrismaModule } from '../prisma/prisma.module';
 import { JwtModule } from '@nestjs/jwt';
-// ❌ Removemos a importação do JwtStrategy que eu tinha mandado
+import { JwtStrategy } from './jwt.strategy';
 
 @Module({
   imports: [
     PrismaModule,
     JwtModule.register({
-      secret: process.env.JWT_SECRET || 'nexus-secret-key',
+      secret: process.env.JWT_SECRET ?? 'nexus-secret-key',
       signOptions: { expiresIn: '1h' },
     }),
   ],
   controllers: [AuthController],
-  providers: [AuthService], // ❌ Removemos ele daqui também
-  exports: [JwtModule], // ✅ Apenas mantemos a linha que exporta a maquininha!
+  providers: [AuthService, JwtStrategy],
+  exports: [JwtModule],
 })
 export class AuthModule {}

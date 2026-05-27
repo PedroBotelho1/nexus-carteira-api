@@ -6,6 +6,7 @@ import {
   Query,
   UseGuards,
   Req,
+  UnauthorizedException, // <-- Importado aqui bonitinho!
 } from '@nestjs/common';
 import { SwapService } from './swap.service';
 import { JwtAuthGuard } from '../auth/jwt-auth/jwt-auth.guard';
@@ -13,7 +14,8 @@ import { Request } from 'express';
 
 interface AuthenticatedRequest extends Request {
   user: {
-    userId: string;
+    sub?: string;
+    userId?: string;
     email: string;
   };
 }
@@ -42,7 +44,12 @@ export class SwapController {
       amount: number;
     },
   ) {
-    const userId = req.user.userId;
+    const userId = req.user.sub || req.user.userId;
+
+    if (!userId) {
+      throw new UnauthorizedException('ID do usuário não encontrado no token');
+    }
+
     return this.swapService.executeSwap(
       userId,
       body.from,

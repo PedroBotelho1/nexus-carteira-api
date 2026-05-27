@@ -29,12 +29,9 @@ export class JwtAuthGuard implements CanActivate {
     }
 
     try {
-      // ✅ Passa JwtPayload como genérico — elimina o any implícito
-      const payload = await this.jwtService.verifyAsync<JwtPayload>(token, {
-        secret: process.env.JWT_SECRET,
-      });
-
-      request.user = payload; // ✅ Agora é JwtPayload, não any
+      // ✅ Segredo cravado para ser idêntico ao do auth.module.ts
+      const payload = await this.jwtService.verifyAsync<JwtPayload>(token);
+      request.user = payload;
     } catch {
       throw new UnauthorizedException('Token inválido ou expirado');
     }
