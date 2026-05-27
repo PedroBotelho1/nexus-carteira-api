@@ -5,4 +5,6 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   app.enableCors();
 }
-bootstrap();
+bootstrap().catch((err) => {
+  console.error('Falha ao iniciar o servidor NestJS:', err);
+});
