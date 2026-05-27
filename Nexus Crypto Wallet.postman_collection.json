@@ -1,0 +1,247 @@
+{
+  "info": {
+    "_postman_id": "6b8922bc-4d91-448c-9b39-1423574a7596",
+    "name": "Nexus Crypto Wallet",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "41314419"
+  },
+  "item": [
+    {
+      "name": "Register User",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"email\": \"Pedro@gmail.com\",\r\n  \"password\": \"senha1234\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "https://nexus-carteira-api.vercel.app/users",
+          "protocol": "https",
+          "host": [
+            "nexus-carteira-api",
+            "vercel",
+            "app"
+          ],
+          "path": [
+            "users"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Login User",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"email\": \"Pedro@gmail.com\",\r\n  \"password\": \"senha1234\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "https://nexus-carteira-api.vercel.app/auth/login",
+          "protocol": "https",
+          "host": [
+            "nexus-carteira-api",
+            "vercel",
+            "app"
+          ],
+          "path": [
+            "auth",
+            "login"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Get Wallet Balances",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJmYmY1M2VmNy1hYzRkLTQ3YzYtOTZiYi0xODFiMzM5NjdlYWQiLCJlbWFpbCI6IlBlZHJvQGdtYWlsLmNvbSIsImlhdCI6MTc3OTkyMTQ1MSwiZXhwIjoxNzc5OTIyMzUxfQ.5jwEIsM849eiIUSdf2QYKAs3B6wiMbnty2Y2T7F3Cxs",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "https://nexus-carteira-api.vercel.app/wallet",
+          "protocol": "https",
+          "host": [
+            "nexus-carteira-api",
+            "vercel",
+            "app"
+          ],
+          "path": [
+            "wallet"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Process Deposit Webhook",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"userId\": \"fbf53ef7-ac4d-47c6-96bb-181b33967ead\",\r\n  \"token\": \"BTC\",\r\n  \"amount\": 5000,\r\n  \"idempotencyKey\": \"uuid-unico-12344\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "https://nexus-carteira-api.vercel.app/webhooks/deposit",
+          "protocol": "https",
+          "host": [
+            "nexus-carteira-api",
+            "vercel",
+            "app"
+          ],
+          "path": [
+            "webhooks",
+            "deposit"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Execute Token Swap",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJmYmY1M2VmNy1hYzRkLTQ3YzYtOTZiYi0xODFiMzM5NjdlYWQiLCJlbWFpbCI6IlBlZHJvQGdtYWlsLmNvbSIsImlhdCI6MTc3OTkyMTQ1MSwiZXhwIjoxNzc5OTIyMzUxfQ.5jwEIsM849eiIUSdf2QYKAs3B6wiMbnty2Y2T7F3Cxs",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"from\": \"BRL\",\r\n  \"to\": \"BTC\",\r\n  \"amount\": 500\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "https://nexus-carteira-api.vercel.app/swap",
+          "protocol": "https",
+          "host": [
+            "nexus-carteira-api",
+            "vercel",
+            "app"
+          ],
+          "path": [
+            "swap"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Request Withdrawal",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJmYmY1M2VmNy1hYzRkLTQ3YzYtOTZiYi0xODFiMzM5NjdlYWQiLCJlbWFpbCI6IlBlZHJvQGdtYWlsLmNvbSIsImlhdCI6MTc3OTkyMTQ1MSwiZXhwIjoxNzc5OTIyMzUxfQ.5jwEIsM849eiIUSdf2QYKAs3B6wiMbnty2Y2T7F3Cxs",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"token\": \"BTC\",\r\n  \"amount\": 0.01\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "https://nexus-carteira-api.vercel.app/withdraw",
+          "protocol": "https",
+          "host": [
+            "nexus-carteira-api",
+            "vercel",
+            "app"
+          ],
+          "path": [
+            "withdraw"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "List Transactions",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJmYmY1M2VmNy1hYzRkLTQ3YzYtOTZiYi0xODFiMzM5NjdlYWQiLCJlbWFpbCI6IlBlZHJvQGdtYWlsLmNvbSIsImlhdCI6MTc3OTkyMTQ1MSwiZXhwIjoxNzc5OTIyMzUxfQ.5jwEIsM849eiIUSdf2QYKAs3B6wiMbnty2Y2T7F3Cxs",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "https://nexus-carteira-api.vercel.app/transactions?page=1&limit=10",
+          "protocol": "https",
+          "host": [
+            "nexus-carteira-api",
+            "vercel",
+            "app"
+          ],
+          "path": [
+            "transactions"
+          ],
+          "query": [
+            {
+              "key": "page",
+              "value": "1"
+            },
+            {
+              "key": "limit",
+              "value": "10"
+            }
+          ]
+        }
+      },
+      "response": []
+    }
+  ]
+}

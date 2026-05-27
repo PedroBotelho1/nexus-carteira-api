@@ -58,3 +58,20 @@ npx prisma migrate dev
 
 # 5. Inicie o servidor em modo de desenvolvimento
 npm run start:dev
+
+
+## 🧪 Guia de Testes da API
+
+Incluí uma **Collection do Postman** na raiz deste projeto. Ela já contém todos os endpoints configurados com os exemplos de *payload* necessários.
+
+### Como utilizar:
+
+1. **Importação**: Baixe o arquivo `Nexus Crypto Wallet.postman_collection.json` presente na raiz deste repositório.
+2. **Postman**: Abra o Postman, clique no botão **Import** e selecione o arquivo.
+3. **Autenticação**: 
+    * Para acessar as rotas protegidas, primeiro execute a requisição `[POST] Register User e depois a Login User.`
+    * As rotas protegidas (ex: `/wallet`, `/swap`, `/withdraw`, `/transactions`) utilizam autenticação **Bearer Token**. Após o login, copie o `accessToken` retornado na resposta e cole-o na aba **Authorization** dessas requisições (selecione o tipo "Bearer Token").
+
+### Dica :
+* **Depósito via Webhook**: O campo `idempotencyKey` é obrigatório para garantir a unicidade da transação. Você pode gerar qualquer string única para testar.
+* **Histórico de Transações**: A rota já está configurada com os parâmetros de paginação `page=1` e `limit=10`.
